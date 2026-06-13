@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Моё Крутое Приложение</title>
+    <title>I love u, Rita — наша история</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем иконки (Font Awesome) и библиотеку для карт (Leaflet) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,278 +17,506 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
+            font-family: 'Segoe UI', 'Georgia', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffe4ec;  /* нежно-розовый фон */
+            color: #5e2a3c;
             padding: 20px;
-            padding-bottom: 80px;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding-bottom: 90px;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Карточки с анимацией при наведении */
-        .card {
-            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            animation: slideUp 0.4s ease-out;
-            animation-fill-mode: both;
+        /* Главный заголовок */
+        .main-title {
+            font-family: 'Georgia', serif;
+            font-size: 52px;
+            color: #ff6699;
+            text-align: center;
+            margin: 20px 0 10px;
+            text-shadow: 3px 3px 12px rgba(255, 102, 153, 0.3);
         }
 
+        .intro-text {
+            text-align: center;
+            font-size: 18px;
+            color: #cc6699;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        /* Карточки (универсальный стиль) */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        h2 {
+            font-size: 24px;
+            color: #ff6699;
+            margin-bottom: 16px;
+            border-left: 5px solid #ff99bb;
+            padding-left: 12px;
         }
 
-        /* Задержки для каскадной анимации */
-        .card:nth-child(1) { animation-delay: 0.05s; }
-        .card:nth-child(2) { animation-delay: 0.1s; }
-        .card:nth-child(3) { animation-delay: 0.15s; }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--tg-theme-text-color, #000) 0%, var(--tg-theme-hint-color, #666) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .button {
-            background: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
+        /* Кнопки */
+        .btn {
+            background: #ff99bb;
             border: none;
-            padding: 14px 20px;
-            border-radius: 12px;
+            padding: 12px 20px;
+            border-radius: 40px;
             font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            margin-top: 12px;
+            font-weight: bold;
+            color: #5e2a3c;
             cursor: pointer;
-            transition: all 0.2s ease;
-            transform: scale(1);
+            transition: 0.2s;
+            margin: 8px 8px 0 0;
+            display: inline-block;
         }
-
-        .button:active {
-            transform: scale(0.97);
-        }
-
-        /* Стили для чата */
-        .chat-messages {
-            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
-            border-radius: 16px;
-            padding: 16px;
-            height: 300px;
-            overflow-y: auto;
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .message {
-            padding: 10px 14px;
-            border-radius: 18px;
-            max-width: 80%;
-            animation: messagePop 0.2s ease-out;
-        }
-
-        @keyframes messagePop {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .message.user {
-            background: var(--tg-theme-button-color, #2481cc);
+        .btn-primary {
+            background: #ff6699;
             color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(255,102,153,0.3);
+        }
+        .btn-primary:active { transform: scale(0.96); }
+
+        /* Таймер и скрытое поле */
+        .timer {
+            font-size: 28px;
+            font-weight: bold;
+            background: #fff0f5;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 60px;
+            margin: 15px 0;
+        }
+        .secret-place {
+            background: #fff0f5;
+            padding: 15px;
+            border-radius: 24px;
+            margin-top: 15px;
+            display: none;
         }
 
-        .message.bot {
-            background: var(--tg-theme-bg-color, #e4e4e4);
-            color: var(--tg-theme-text-color, #000);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
+        /* История — таймлайн */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
         }
-
-        .chat-input {
+        .timeline-item {
+            margin-bottom: 35px;
+            position: relative;
+        }
+        .timeline-date {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff6699;
+            margin-bottom: 8px;
+        }
+        .filmstrip {
             display: flex;
-            gap: 10px;
+            overflow-x: auto;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 8px 0;
+        }
+        .filmstrip img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .memory-text {
+            background: rgba(255,240,245,0.9);
+            padding: 12px;
+            border-radius: 20px;
+            font-size: 15px;
         }
 
-        .chat-input input {
+        /* Вишлист: две колонки */
+        .wishlist-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .wish-col {
+            flex: 1;
+            background: #fff4f8;
+            border-radius: 24px;
+            padding: 16px;
+        }
+        .wish-item {
+            background: white;
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .wish-item.completed {
+            opacity: 0.4;
+            filter: grayscale(0.3);
+        }
+
+        /* плавающий чат-бот */
+        .floating-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background: #ff6699;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+        }
+        .chat-header {
+            background: #ff6699;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+        }
+        .chat-messages {
             flex: 1;
             padding: 12px;
-            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            overflow-y: auto;
+            font-size: 14px;
+        }
+        .chat-input-area {
+            display: flex;
+            border-top: 1px solid #eee;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            outline: none;
+        }
+        /* Карта */
+        #map {
+            height: 300px;
             border-radius: 24px;
-            background: var(--tg-theme-bg-color, #fff);
-            color: var(--tg-theme-text-color, #000);
+            margin-top: 10px;
         }
-
-        /* Красивая прокрутка */
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
+        /* Роадмап */
+        .roadmap-point {
+            background: #ffd9e6;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 20px;
         }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
+        /* плейлист */
+        .track {
+            background: white;
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: space-between;
         }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--tg-theme-hint-color, #aaa);
-            border-radius: 10px;
+        i {
+            margin-right: 6px;
+        }
+        button {
+            background: none;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="greeting">✨ Привет!</h1>
-        <p style="margin-bottom: 24px; color: var(--tg-theme-hint-color, #666);">Добро пожаловать в моё мини-приложение</p>
+<div class="container">
+    <div class="main-title">I love u, Rita</div>
+    <div class="intro-text">Каждый день с тобой — маленькая сказка. Здесь живут наши самые тёплые воспоминания, планы и мечты. Для тебя, Рита ❤️</div>
 
-        <!-- Блок с функциями -->
-        <div class="card" id="userCard">
-            <strong>👤 Твои данные из Telegram</strong>
-            <p id="userInfo" style="margin-top: 8px;">Загрузка...</p>
-        </div>
-
-        <div class="card">
-            <strong>⚡ Крутые фишки</strong>
-            <ul style="margin-top: 12px; margin-left: 20px;">
-                <li>Плавные анимации</li>
-                <li>Красивая прокрутка</li>
-                <li>Тёмная тема (автоматически)</li>
-                <li>Виброотклик при нажатии</li>
-            </ul>
-            <button class="button" id="actionBtn">💥 Сделать что-то эпичное</button>
-        </div>
-
-        <!-- Встроенный чат-бот -->
-        <div class="card" style="padding: 16px;">
-            <strong>💬 Чат с ботом</strong>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot">Привет! Я твой помощник. Задавай вопросы или просто болтай 😊</div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="Напиши что-нибудь..." />
-                <button class="button" id="sendBtn" style="width: auto; margin-top: 0; padding: 12px 20px;">➤</button>
+    <!-- 1. Блок "Приглашение на свидание" -->
+    <div class="card" id="dateCard">
+        <h2>💖 Приглашение на свидание</h2>
+        <div id="nextDateDisplay">📅 Дата: 30 июня 2026, 19:00</div>
+        <div class="timer" id="countdownTimer">Загрузка...</div>
+        <button class="btn btn-primary" id="viewFullBtn">Посмотреть</button>
+        <div id="fullDateModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center;">
+            <div style="background:#ffe4ec; width:90%; max-width:400px; border-radius:40px; padding:20px; text-align:center;">
+                <h3>✨ Наше свидание ✨</h3>
+                <div id="fullTimer" style="font-size:24px; margin:15px 0;"></div>
+                <p>🎀 Dress code: твоё любимое платье 🎀</p>
+                <div id="secretSection">
+                    <input type="password" id="secretPass" placeholder="Введи дату знакомства (ДД.ММ.ГГГГ)" style="padding:10px; border-radius:40px; border:1px solid #ff99bb; width:80%;">
+                    <button id="unlockPlaceBtn" class="btn">Открыть место</button>
+                    <div id="secretPlaceMap" style="margin-top:15px; display:none;">📍 Тайное место: Набережная, скамейка у фонтана 💕</div>
+                </div>
+                <button id="confirmBtn" class="btn btn-primary" style="margin-top:15px;">💗 Пойду!</button>
+                <button id="remindBtnTelegram" class="btn">🔔 Напомнить в Telegram</button>
+                <button id="closeFullBtn" class="btn">Свернуть</button>
+                <div id="heartsEffect" style="margin-top:10px;"></div>
             </div>
         </div>
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        
-        // Сообщаем, что всё загрузилось
-        tg.ready();
-        tg.expand();  // Растягиваем на весь экран
-        
-        // Включаем вибрацию для телефонов (если доступно)
-        const haptic = () => {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-        };
+    <!-- 2. Наша история (таймлайн) -->
+    <div class="card">
+        <h2>📖 Наша история</h2>
+        <div style="text-align:right;"><button id="calendarJumpBtn" class="btn">📅 Календарь</button></div>
+        <div id="timelineContainer" class="timeline"></div>
+        <button id="loadFullHistoryBtn" class="btn">Вся история →</button>
+    </div>
 
-        // 1. Показываем данные пользователя
-        const user = tg.initDataUnsafe?.user;
-        const userName = user?.first_name || 'гость';
-        document.getElementById('userInfo').innerHTML = `
-            <strong>ID:</strong> ${user?.id || 'неизвестно'}<br>
-            <strong>Имя:</strong> ${user?.first_name || '—'} ${user?.last_name || ''}<br>
-            <strong>Язык:</strong> ${user?.language_code || '—'}
-        `;
-        document.getElementById('greeting').innerHTML = `Привет, ${userName}! 🚀`;
+    <!-- 3. Вишлист -->
+    <div class="card">
+        <h2>🎁 Вишлист</h2>
+        <div class="wishlist-row">
+            <div class="wish-col"><h3>Её мечты</h3><div id="herWishlist"></div></div>
+            <div class="wish-col"><h3>Его мечты</h3><div id="hisWishlist"></div></div>
+        </div>
+    </div>
 
-        // 2. Главная кнопка Telegram (внизу экрана)
-        tg.MainButton.setText("🔥 Главное действие");
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
+    <!-- 4. Интерактивный плейлист -->
+    <div class="card">
+        <h2>🎧 Наш плейлист</h2>
+        <div><button id="shufflePlaylistBtn" class="btn">🔀 Смешать</button></div>
+        <div id="playlistContainer"></div>
+    </div>
+
+    <!-- 5. Карта "Наши места" -->
+    <div class="card">
+        <h2>🗺️ Наши места</h2>
+        <div id="map" style="height: 280px;"></div>
+        <button id="memoryPathBtn" class="btn">🕯️ Тропа памяти</button>
+    </div>
+
+    <!-- 6. Роадмап 5 лет -->
+    <div class="card">
+        <h2>🚀 План на 5 лет</h2>
+        <div id="roadmapContainer"></div>
+        <button id="randomDreamBtn" class="btn">✨ Безумная мечта</button>
+    </div>
+</div>
+
+<!-- плавающий бот Архивариус -->
+<div class="floating-chat" id="chatFloater"><i class="fas fa-robot"></i></div>
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header">📜 Архивариус</div>
+    <div class="chat-messages" id="chatMessagesHistory"><div>Спроси меня: "Напомни, где мы целовались под дождем?" или "Покажи случайное фото"</div></div>
+    <div class="chat-input-area"><input type="text" id="chatInputField" placeholder="Спроси..."><button id="chatSendBtn">📨</button></div>
+</div>
+
+<script>
+    // Инициализация Telegram WebApp
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    const haptic = () => { if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); };
+
+    // ---------- ДАННЫЕ ДЛЯ ДЕМОНСТРАЦИИ (ты сможешь легко менять) ----------
+    const nextDate = new Date(2026, 5, 30, 19, 0, 0); // 30 июня 2026 19:00
+    function updateTimer() {
+        const now = new Date();
+        const diff = nextDate - now;
+        if(diff<=0) return "Уже сегодня! ❤️";
+        const days = Math.floor(diff/(1000*60*60*24));
+        const hours = Math.floor((diff/(1000*60*60))%24);
+        const mins = Math.floor((diff/(1000*60))%60);
+        return `${days}д ${hours}ч ${mins}м`;
+    }
+    setInterval(()=>{
+        const timerDiv = document.getElementById('countdownTimer');
+        if(timerDiv) timerDiv.innerText = updateTimer();
+        const fullTimerDiv = document.getElementById('fullTimer');
+        if(fullTimerDiv) fullTimerDiv.innerText = "🕯️ "+updateTimer();
+    },1000);
+
+    // секретное место
+    document.getElementById('unlockPlaceBtn')?.addEventListener('click',()=>{
+        const pass = document.getElementById('secretPass').value.trim();
+        if(pass === "01.09.2023") { // тут поставь свою реальную дату знакомства
+            document.getElementById('secretPlaceMap').style.display = 'block';
             haptic();
-            tg.showPopup({
-                title: "💪 Круто!",
-                message: `Привет, ${userName}! Ты нажал главную кнопку.`,
-                buttons: [{ type: "ok" }]
-            });
-        });
+        } else alert('Неверная дата попробуй ещё... 💔');
+    });
+    document.getElementById('confirmBtn')?.addEventListener('click',()=>{
+        haptic();
+        const heartsDiv = document.getElementById('heartsEffect');
+        heartsDiv.innerHTML = "💖💗💓💕💘💝";
+        setTimeout(()=>heartsDiv.innerHTML="",1500);
+        tg.showAlert("Спасибо! Я так жду этой встречи ❤️");
+    });
+    document.getElementById('remindBtnTelegram')?.addEventListener('click',()=>{
+        tg.showPopup({title:"Напомню✨", message:"Я пришлю уведомление за час до свидания!", buttons:[{type:"ok"}]});
+    });
+    const modal = document.getElementById('fullDateModal');
+    document.getElementById('viewFullBtn')?.addEventListener('click',()=>{ modal.style.display='flex'; tg.expand(); });
+    document.getElementById('closeFullBtn')?.addEventListener('click',()=>{ modal.style.display='none'; });
 
-        // 3. Обработка кнопки действия
-        document.getElementById('actionBtn').addEventListener('click', () => {
-            haptic();
-            tg.showAlert(`🔥 Эпично! Твоё действие засчитано, ${userName}.`);
-        });
+    // ------- ИСТОРИЯ (пример) ----------
+    const memories = [
+        {date:"15 мая 2023", photos:["https://picsum.photos/id/20/200/150"], text:"Наше первое мороженое в парке."},
+        {date:"3 июля 2023", photos:["https://picsum.photos/id/96/200/150"], text:"Закат у реки, ты сказала 'да' встречаться."},
+        {date:"20 декабря 2024", photos:["https://picsum.photos/id/169/200/150","https://picsum.photos/id/155/200/150"], text:"Поездка в Санкт-Петербург, снег и уют."}
+    ];
+    function renderTimeline() {
+        const container = document.getElementById('timelineContainer');
+        if(!container) return;
+        container.innerHTML = memories.map(m => `
+            <div class="timeline-item">
+                <div class="timeline-date">📅 ${m.date}</div>
+                <div class="filmstrip">${m.photos.map(p => `<img src="${p}" loading="lazy">`).join('')}</div>
+                <div class="memory-text">${m.text}</div>
+            </div>
+        `).join('');
+    }
+    renderTimeline();
+    document.getElementById('loadFullHistoryBtn')?.addEventListener('click',()=>{ alert("Здесь будет вся наша длинная история, с фотопленкой и розовыми кружочками в календаре ❤️"); });
+    document.getElementById('calendarJumpBtn')?.addEventListener('click',()=>{ alert("Календарь: у каждого дня с историей — розовый кружок"); });
 
-        // 4. Встроенный чат (простой, но работает)
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        
-        function addMessage(text, isUser = true) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-            msgDiv.textContent = text;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // Анимация уже в CSS
+    // ------- Вишлист ----------
+    let herWishes = [{name:"Кольцо с лунным камнем", done:false},{name:"Ужин на крыше", done:false}];
+    let hisWishes = [{name:"Спа-день вдвоём", done:false},{name:"Ретро-игровая приставка", done:false}];
+    function renderWishes() {
+        const herDiv = document.getElementById('herWishlist');
+        const hisDiv = document.getElementById('hisWishlist');
+        if(herDiv) herDiv.innerHTML = herWishes.map((w,i)=>`<div class="wish-item ${w.done?'completed':''}">${w.name} ${!w.done?`<button class="btn completeWish" data-list="her" data-idx="${i}">✨ Исполнено</button>`:'✅'}</div>`).join('');
+        if(hisDiv) hisDiv.innerHTML = hisWishes.map((w,i)=>`<div class="wish-item ${w.done?'completed':''}">${w.name} ${!w.done?`<button class="btn completeWish" data-list="his" data-idx="${i}">✨ Исполнено</button>`:'✅'}</div>`).join('');
+    }
+    renderWishes();
+    document.addEventListener('click',(e)=>{
+        if(e.target.classList.contains('completeWish')){
+            const list = e.target.dataset.list;
+            const idx = parseInt(e.target.dataset.idx);
+            if(list==='her') herWishes[idx].done=true;
+            else hisWishes[idx].done=true;
+            renderWishes();
+            tg.showAlert("Мечта исполнена! 💫 Записано в нашу историю.");
         }
-        
-        function botReply(message) {
-            const lowerMsg = message.toLowerCase();
-            let reply = "Интересно... Расскажи ещё!";
-            
-            if (lowerMsg.includes('привет') || lowerMsg.includes('здарова')) {
-                reply = "И тебе привет! Как дела? 🫡";
-            } else if (lowerMsg.includes('как дела')) {
-                reply = "У меня отлично! Я же бот, всегда на позитиве 😎";
-            } else if (lowerMsg.includes('помощь') || lowerMsg.includes('help')) {
-                reply = "Я могу просто поболтать или подсказать, если что. Спрашивай!";
-            } else if (lowerMsg.includes('пока')) {
-                reply = "Пока-пока! Заходи ещё 👋";
-            }
-            
-            setTimeout(() => addMessage(reply, false), 400);
+    });
+
+    // ------- Плейлист ----------
+    let tracks = [
+        {name:"Follow You - Imagine Dragons", author:"его выбор", year:"2023"},
+        {name:"Дыхание - Нюша", author:"её выбор", year:"2024"}
+    ];
+    function renderPlaylist() {
+        const container = document.getElementById('playlistContainer');
+        if(container) container.innerHTML = tracks.map(t=>`<div class="track"><span><i class="fas fa-music"></i> ${t.name} (${t.author})</span><i class="fas fa-heart" style="color:#ff6699"></i></div>`).join('');
+    }
+    renderPlaylist();
+    document.getElementById('shufflePlaylistBtn')?.addEventListener('click',()=>{
+        const shuffled = [...tracks].sort(()=>Math.random()-0.5);
+        tracks = shuffled;
+        renderPlaylist();
+        tg.showAlert("Плейлист перемешан! ✨");
+    });
+
+    // ------- Карта (Leaflet) ----------
+    let mapInitialized = false;
+    function initMap() {
+        if(mapInitialized) return;
+        const map = L.map('map').setView([55.751244, 37.618423], 12);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'}).addTo(map);
+        const places = [
+            {coords:[55.751244, 37.618423], name:"Место знакомства", icon:"❤️", color:"gold"},
+            {coords:[55.758, 37.618], name:"Наше кафе", icon:"☕", color:"green"}
+        ];
+        places.forEach(p=>L.marker(p.coords).bindPopup(`<b>${p.name}</b><br>❤️ ${p.icon}<button class='btn' onclick='scrollToMemory()'>Вернуться в память</button>`).addTo(map));
+        mapInitialized=true;
+    }
+    document.getElementById('map') && initMap();
+    window.scrollToMemory = ()=>{ alert("Скролл к истории с этим местом (добавим позже)"); };
+    document.getElementById('memoryPathBtn')?.addEventListener('click',()=>{ alert("Тропа памяти: от места знакомства → наше кафе 💞"); });
+
+    // ------- Роадмап ----------
+    const roadmap = [
+        {goal:"Квартира", year:2025, status:"В процессе"},
+        {goal:"Кот/собака", year:2026, status:"Запланировано"},
+        {goal:"Путешествие в Японию", year:2027, status:"Мечта"},
+        {goal:"Свадьба", year:2028, status:"Скоро"}
+    ];
+    function renderRoadmap() {
+        const container = document.getElementById('roadmapContainer');
+        if(container) container.innerHTML = roadmap.map(r=>`<div class="roadmap-point"><b>${r.goal}</b> — ${r.year} <span style="background:#ffc0cb; border-radius:20px; padding:4px 10px;">${r.status}</span><br><button class="remindRoadmap btn" data-goal="${r.goal}">🔔 Напомнить</button></div>`).join('');
+    }
+    renderRoadmap();
+    document.addEventListener('click',(e)=>{
+        if(e.target.classList.contains('remindRoadmap')){
+            tg.showPopup({title:"Напоминание", message:`Напомню о мечте "${e.target.dataset.goal}" через 2 недели ❤️`, buttons:[{type:"ok"}]});
         }
-        
-        function sendMessage() {
-            const text = chatInput.value.trim();
-            if (!text) return;
-            
-            addMessage(text, true);
-            chatInput.value = '';
-            haptic();
-            botReply(text);
+    });
+    document.getElementById('randomDreamBtn')?.addEventListener('click',()=>{
+        const dreams = ["Научиться танцевать вальс", "Посадить дерево вместе", "Устроить пикник на крыше"];
+        const randomDream = dreams[Math.floor(Math.random()*dreams.length)];
+        tg.showAlert(`🔥 Безумная мечта: ${randomDream}. Принимаешь вызов?`);
+    });
+
+    // ----- Бот Архивариус (простой, но ищет #дождь)-----
+    const chatMessagesBox = document.getElementById('chatMessagesHistory');
+    const chatInputField = document.getElementById('chatInputField');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    function addBotMessage(msg) {
+        const div = document.createElement('div');
+        div.innerHTML = `<b>Архивариус:</b> ${msg}`;
+        chatMessagesBox.appendChild(div);
+        chatMessagesBox.scrollTop = chatMessagesBox.scrollHeight;
+    }
+    function processChat(query) {
+        const q = query.toLowerCase();
+        if(q.includes("дождь") || q.includes("целовались под дождем")) {
+            addBotMessage("🌧️ Помню! Это было 15 августа 2023 года, возле твоего дома, под тёплым летним ливнем. Эмоции: #магия");
+        } else if(q.includes("случайное фото")) {
+            const randomMemory = memories[Math.floor(Math.random()*memories.length)];
+            addBotMessage(`🎞️ Вот случайный кадр: ${randomMemory.date} — ${randomMemory.text} ${randomMemory.photos[0] ? `(фото: ${randomMemory.photos[0]})` : ''}`);
+        } else {
+            addBotMessage("Я — Архивариус. Спроси что-то про нас: #дождь, 'случайное фото' или просто поговори со мной ✨");
         }
-        
-        sendBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-        
-        // Обновляем стили при смене темы (Telegram сам обновляет цвета)
-        document.body.style.background = tg.themeParams.bg_color || '#ffffff';
-    </script>
+    }
+    chatSendBtn?.addEventListener('click',()=>{
+        const text = chatInputField.value.trim();
+        if(!text) return;
+        const userDiv = document.createElement('div');
+        userDiv.innerHTML = `<b>Ты:</b> ${text}`;
+        chatMessagesBox.appendChild(userDiv);
+        chatInputField.value = '';
+        processChat(text);
+    });
+    // плавающее окно
+    const chatFloater = document.getElementById('chatFloater');
+    const chatWindowDiv = document.getElementById('chatWindow');
+    chatFloater?.addEventListener('click',()=>{
+        if(chatWindowDiv.style.display === 'flex') chatWindowDiv.style.display = 'none';
+        else chatWindowDiv.style.display = 'flex';
+    });
+    // Адаптация под тему телеграм (фон уже розовый, оставим)
+</script>
 </body>
 </html>
