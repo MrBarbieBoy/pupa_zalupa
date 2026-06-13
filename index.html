@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>I love u, Rita</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Подключение шрифта MTS Wide (аналог, максимально близкий) -->
     <link href="https://fonts.cdnfonts.com/css/mts-wide" rel="stylesheet">
     <style>
         * {
@@ -15,9 +14,9 @@
         }
 
         body {
-            font-family: 'MTS Wide', 'Posto One', 'Segoe UI', -apple-system, sans-serif;
+            font-family: 'MTS Wide', 'Posto One', -apple-system, sans-serif;
             background: #ffe4ec;
-            color: #1a1a1a;  /* чёрный текст везде */
+            color: #1a1a1a;
             padding: 20px;
             padding-bottom: 100px;
             min-height: 100vh;
@@ -28,70 +27,83 @@
             margin: 0 auto;
         }
 
-        /* Заголовок и вступление */
+        /* Заголовок — одна строка */
         .main-title {
-            font-family: 'MTS Wide', 'Posto One', sans-serif;
-            font-size: 52px;
+            font-family: 'MTS Wide', sans-serif;
+            font-size: 48px;
             color: #1a1a1a;
             text-align: center;
             margin: 20px 0 12px;
-            letter-spacing: 1px;
             font-weight: 600;
+            white-space: nowrap;
         }
 
+        /* Вступление — слева */
         .intro-text {
-            text-align: center;
-            font-size: 18px;
+            text-align: left;
+            font-size: 16px;
             color: #1a1a1a;
             margin-bottom: 35px;
-            line-height: 1.4;
-            padding: 0 10px;
+            line-height: 1.5;
+            padding: 0 5px;
         }
 
         /* Карточка приглашения */
         .date-card {
             background: rgba(255, 248, 250, 0.95);
             border-radius: 48px;
-            padding: 30px 20px 35px;
+            padding: 24px 20px 35px;
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
             text-align: center;
             position: relative;
         }
 
-        .date-display {
-            font-size: 24px;
+        .invite-title {
+            font-size: 20px;
             font-weight: 500;
             color: #1a1a1a;
-            margin: 20px 0 30px;
+            margin-bottom: 15px;
         }
 
-        /* Кнопка "Посмотреть" — стеклянная, наполовину наружу */
+        .date-display {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 10px 0 30px;
+        }
+
+        /* Настоящая стеклянная кнопка */
         .glass-btn {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
             border-radius: 60px;
-            padding: 14px 28px;
+            padding: 14px 32px;
             font-size: 18px;
             font-weight: 600;
             color: #1a1a1a;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
             font-family: 'MTS Wide', sans-serif;
-            margin-top: 10px;
-            margin-bottom: -45px;  /* чтобы кнопка выступала вниз */
+            margin-top: 5px;
+            margin-bottom: -45px;
             position: relative;
             z-index: 10;
             display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .glass-btn:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.5);
         }
 
-        /* Модальное окно (полноэкранное) */
+        /* Модальное окно */
         .full-modal {
             position: fixed;
             top: 0;
@@ -112,48 +124,47 @@
             max-width: 480px;
             max-height: 85vh;
             border-radius: 48px;
-            padding: 30px 24px 40px;
+            padding: 24px 20px 30px;
             overflow-y: auto;
-            position: relative;
             font-family: 'MTS Wide', sans-serif;
             color: #1a1a1a;
         }
 
-        /* Убираем лишние смайлики, оставляем только нужные */
-        .no-emoji {
-            /* просто класс-маркер */
-        }
-
         .modal-content h3 {
             font-size: 28px;
-            margin-bottom: 20px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* Таймер: слева, без фона, крупно */
+        /* Таймер */
         .timer-section {
-            text-align: left;
-            margin: 10px 0 15px;
-        }
-        .timer-label {
-            font-size: 16px;
-            opacity: 0.7;
+            margin: 15px 0 15px;
         }
         .timer-full {
             font-size: 28px;
             font-weight: 600;
             letter-spacing: 1px;
-            color: #1a1a1a;
+            text-align: center;
         }
 
-        /* Dress code — просто текст */
         .dress-code {
-            margin: 15px 0 25px;
+            margin: 10px 0 20px;
             font-size: 18px;
-            text-align: left;
+            text-align: center;
         }
 
-        /* Поле ввода и кнопка открыть место — одинаковой ширины */
+        /* Мои картинки */
+        .my-image {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .my-image img {
+            max-width: 100%;
+            border-radius: 32px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Поле ввода даты */
         .secret-input {
             margin: 20px 0 10px;
             display: flex;
@@ -169,12 +180,13 @@
             text-align: center;
             outline: none;
             font-family: inherit;
+            background: white;
         }
         .secret-input button {
             width: 100%;
         }
 
-        /* Карта и твоё изображение */
+        /* Карта */
         .map-place {
             margin: 15px 0;
             border-radius: 32px;
@@ -186,17 +198,8 @@
             height: 200px;
             border: none;
         }
-        .custom-image {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .custom-image img {
-            max-width: 100%;
-            border-radius: 32px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
 
-        /* Кнопки общие */
+        /* Кнопки */
         .btn {
             background: #e6ccd4;
             border: none;
@@ -208,30 +211,26 @@
             cursor: pointer;
             transition: 0.2s;
             font-family: inherit;
-            display: inline-block;
-            text-align: center;
         }
         .btn-primary {
             background: #ff99bb;
-            color: #1a1a1a;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            width: 100%;
         }
         .btn-primary:active, .btn:active {
             transform: scale(0.97);
         }
 
-        /* Две кнопки в ряд */
         .double-buttons {
             display: flex;
             gap: 12px;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: 25px;
         }
         .double-buttons .btn {
             flex: 1;
         }
 
-        /* Анимация сердечек */
+        /* Сердечки */
         .heart {
             position: fixed;
             font-size: 24px;
@@ -254,46 +253,50 @@
         Для тебя, Рита
     </div>
 
-    <!-- Карточка приглашения -->
     <div class="date-card">
+        <div class="invite-title">Приглашение на свидание</div>
         <div class="date-display">15 июня, 12:00</div>
         <button class="glass-btn" id="viewFullBtn">Посмотреть</button>
     </div>
 </div>
 
-<!-- Полноэкранное окно -->
+<!-- Модальное окно -->
 <div class="full-modal" id="fullModal">
     <div class="modal-content">
         <h3>Наше свидание</h3>
 
-        <!-- Таймер слева -->
+        <!-- КАРТИНКА №1 (твоя) -->
+        <div class="my-image" id="img1Container">
+            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Рисунок+1+из+Figma" alt="Наша картинка 1">
+        </div>
+
         <div class="timer-section">
             <div class="timer-full" id="countdownTimer">Загрузка...</div>
         </div>
 
-        <!-- Dress code простым текстом -->
         <div class="dress-code">Dress code: твоё любимое платье</div>
 
-        <!-- Скрытое поле и кнопка открыть место -->
+        <!-- КАРТИНКА №2 (твоя) -->
+        <div class="my-image" id="img2Container">
+            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Рисунок+2+из+Figma" alt="Наша картинка 2">
+        </div>
+
+        <button class="btn btn-primary" id="goBtn">Пойду</button>
+
+        <!-- КАРТИНКА №3 (твоя) -->
+        <div class="my-image" id="img3Container">
+            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Рисунок+3+из+Figma" alt="Наша картинка 3">
+        </div>
+
         <div class="secret-input">
-            <input type="password" id="secretPassword" placeholder="Введи дату знакомства (ДД.ММ.ГГГГ)">
+            <input type="text" id="secretPassword" placeholder="ДД.ММ.ГГГГ">
             <button class="btn" id="unlockMapBtn">🔓 Открыть место встречи</button>
         </div>
 
-        <!-- Карта (появляется после пароля) -->
         <div class="map-place" id="mapContainer">
             <iframe id="yandexMap" src="about:blank"></iframe>
         </div>
 
-        <!-- ТВОЁ ИЗОБРАЖЕНИЕ из Figma (заменишь ссылку) -->
-        <div class="custom-image" id="customImageContainer">
-            <img id="userDrawingImg" src="https://via.placeholder.com/400x200?text=Твой+рисунок+из+Figma" alt="Наша картинка">
-        </div>
-
-        <!-- Кнопка Пойду -->
-        <button class="btn btn-primary" id="goBtn" style="width:100%; margin: 15px 0 10px;">Пойду</button>
-
-        <!-- Две кнопки: Напомнить и Свернуть -->
         <div class="double-buttons">
             <button class="btn" id="remindTelegramBtn">🔔 Напомнить в Telegram</button>
             <button class="btn" id="closeModalBtn">Свернуть окно</button>
@@ -303,28 +306,31 @@
 
 <script>
     // ======================= НАСТРОЙКИ (ТЫ МЕНЯЕШЬ ЗДЕСЬ) =======================
-    // Дата свидания (только для таймера, 15 июня 2026 12:00)
     const targetDate = new Date(2026, 5, 15, 12, 0, 0);
+    const correctPassword = "01.09.2023";   // замени на свою дату знакомства
     
-    // Пароль (дата знакомства)
-    const correctPassword = "01.09.2023";   // <- замени на свою
-    
-    // Ссылка на карту (Яндекс или Google)
+    // Ссылка на карту
     const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456&source=constructor";
     
-    // ССЫЛКА НА ТВОЙ РИСУНОК ИЗ FIGMA (замени после того как нарисуешь)
-    const yourFigmaImageUrl = "https://via.placeholder.com/500x300?text=Мой+рисунок+из+Figma+%F0%9F%8E%A8";
+    // ТВОИ КАРТИНКИ (замени ссылки после того как нарисуешь в Figma)
+    const yourImage1 = "https://via.placeholder.com/500x200?text=Мой+рисунок+1";
+    const yourImage2 = "https://via.placeholder.com/500x200?text=Мой+рисунок+2";
+    const yourImage3 = "https://via.placeholder.com/500x200?text=Мой+рисунок+3";
     // =========================================================================
 
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
-
     const haptic = () => {
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
     };
 
-    // Обновление таймера
+    // Устанавливаем твои картинки
+    document.getElementById('userImg1').src = yourImage1;
+    document.getElementById('userImg2').src = yourImage2;
+    document.getElementById('userImg3').src = yourImage3;
+
+    // Таймер
     function updateTimers() {
         const now = new Date();
         const diff = targetDate - now;
@@ -351,64 +357,62 @@
     const passInput = document.getElementById('secretPassword');
     const mapContainer = document.getElementById('mapContainer');
     const mapIframe = document.getElementById('yandexMap');
-    const userImg = document.getElementById('userDrawingImg');
-    
-    // Подставляем твою картинку (заменишь ссылку)
-    userImg.src = yourFigmaImageUrl;
 
-    // Открыть окно
     viewBtn.addEventListener('click', () => {
         modal.style.display = 'flex';
         haptic();
         tg.expand();
     });
 
-    // Свернуть
     closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
         haptic();
     });
 
-    // Пойду! с сердечками
+    // Кнопка Пойду — сердечки
     goBtn.addEventListener('click', () => {
         haptic();
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 25; i++) {
             const heart = document.createElement('div');
             heart.innerHTML = '❤️';
             heart.className = 'heart';
             heart.style.left = Math.random() * 100 + '%';
             heart.style.top = Math.random() * 80 + '%';
-            heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+            heart.style.fontSize = (18 + Math.random() * 32) + 'px';
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1000);
         }
-        tg.showAlert("Спасибо! Жду с нетерпением ❤️");
+        tg.showAlert("Спасибо! Жду с нетерпением");
     });
 
-    // Напомнить
+    // Напомнить (пока попап, в следующем блоке сделаем реальное)
     remindBtn.addEventListener('click', () => {
         haptic();
         tg.showPopup({
             title: "Напоминание",
-            message: "Я пришлю уведомление за час до свидания!",
+            message: "Я пришлю уведомление в Telegram за час до свидания",
             buttons: [{ type: "ok" }]
         });
     });
 
-    // Открыть карту по паролю
+    // Проверка пароля (гибкая: убираем точки и пробелы)
     unlockBtn.addEventListener('click', () => {
-        if (passInput.value.trim() === correctPassword) {
+        let entered = passInput.value.trim();
+        // Убираем все точки и пробелы для сравнения
+        const normalizedEntered = entered.replace(/[^\d]/g, '');
+        const normalizedCorrect = correctPassword.replace(/[^\d]/g, '');
+        
+        if (normalizedEntered === normalizedCorrect) {
             haptic();
             mapContainer.style.display = 'block';
             mapIframe.src = meetingMapUrl;
-            tg.showAlert("Вот место встречи. Никому не говори 🤫");
+            tg.showAlert("Вот место встречи. Никому не говори");
         } else {
-            tg.showAlert("Неверная дата. Попробуй ещё раз");
+            tg.showAlert("Неверная дата. Попробуй ещё раз (ДД.ММ.ГГГГ)");
             haptic();
         }
     });
 
-    // Закрытие по клику на фон
     modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.style.display = 'none';
     });
