@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>I love u, Rita</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключение шрифта MTS Wide (аналог, максимально близкий) -->
+    <link href="https://fonts.cdnfonts.com/css/mts-wide" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,9 +15,9 @@
         }
 
         body {
-            font-family: 'Georgia', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'MTS Wide', 'Posto One', 'Segoe UI', -apple-system, sans-serif;
             background: #ffe4ec;
-            color: #5e2a3c;
+            color: #1a1a1a;  /* чёрный текст везде */
             padding: 20px;
             padding-bottom: 100px;
             min-height: 100vh;
@@ -26,155 +28,207 @@
             margin: 0 auto;
         }
 
-        /* Блок 0: заголовок и вступление */
+        /* Заголовок и вступление */
         .main-title {
-            font-family: 'Georgia', serif;
-            font-size: 54px;
-            color: #ff6699;
+            font-family: 'MTS Wide', 'Posto One', sans-serif;
+            font-size: 52px;
+            color: #1a1a1a;
             text-align: center;
             margin: 20px 0 12px;
-            text-shadow: 3px 3px 15px rgba(255, 102, 153, 0.4);
             letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .intro-text {
             text-align: center;
             font-size: 18px;
-            color: #cc6699;
+            color: #1a1a1a;
             margin-bottom: 35px;
-            font-style: italic;
             line-height: 1.4;
             padding: 0 10px;
         }
 
-        /* Карточка свидания */
+        /* Карточка приглашения */
         .date-card {
             background: rgba(255, 248, 250, 0.95);
-            border-radius: 32px;
-            padding: 24px 20px;
+            border-radius: 48px;
+            padding: 30px 20px 35px;
             box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
             text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .date-card h2 {
-            font-size: 26px;
-            color: #ff6699;
-            margin-bottom: 20px;
+            position: relative;
         }
 
         .date-display {
-            font-size: 22px;
-            font-weight: bold;
-            color: #b2456e;
-            margin: 15px 0;
+            font-size: 24px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin: 20px 0 30px;
         }
 
-        /* Кнопки */
-        .btn {
-            background: #ff99bb;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-size: 16px;
+        /* Кнопка "Посмотреть" — стеклянная, наполовину наружу */
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-size: 18px;
             font-weight: 600;
-            color: #5e2a3c;
+            color: #1a1a1a;
             cursor: pointer;
             transition: 0.2s;
-            margin: 8px 8px 0 0;
+            font-family: 'MTS Wide', sans-serif;
+            margin-top: 10px;
+            margin-bottom: -45px;  /* чтобы кнопка выступала вниз */
+            position: relative;
+            z-index: 10;
             display: inline-block;
-            font-family: inherit;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .btn-primary {
-            background: #ff6699;
-            color: white;
-            box-shadow: 0 4px 12px rgba(255, 102, 153, 0.3);
+        .glass-btn:active {
+            transform: scale(0.97);
         }
 
-        .btn-primary:active {
-            transform: scale(0.96);
-        }
-
-        /* Полноэкранное модальное окно */
+        /* Модальное окно (полноэкранное) */
         .full-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
             z-index: 2000;
             display: none;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
             background: #ffeef4;
             width: 90%;
-            max-width: 450px;
+            max-width: 480px;
             max-height: 85vh;
             border-radius: 48px;
-            padding: 24px 20px 30px;
-            text-align: center;
+            padding: 30px 24px 40px;
             overflow-y: auto;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
             position: relative;
+            font-family: 'MTS Wide', sans-serif;
+            color: #1a1a1a;
+        }
+
+        /* Убираем лишние смайлики, оставляем только нужные */
+        .no-emoji {
+            /* просто класс-маркер */
         }
 
         .modal-content h3 {
             font-size: 28px;
-            color: #ff6699;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
+        /* Таймер: слева, без фона, крупно */
+        .timer-section {
+            text-align: left;
+            margin: 10px 0 15px;
+        }
+        .timer-label {
+            font-size: 16px;
+            opacity: 0.7;
+        }
         .timer-full {
             font-size: 28px;
-            font-weight: bold;
-            background: #ffe0e8;
-            display: inline-block;
-            padding: 12px 24px;
-            border-radius: 60px;
-            margin: 15px 0;
-            letter-spacing: 2px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #1a1a1a;
         }
 
+        /* Dress code — просто текст */
         .dress-code {
-            background: #ffd9e6;
-            padding: 12px;
-            border-radius: 40px;
-            margin: 15px 0;
-            font-size: 17px;
+            margin: 15px 0 25px;
+            font-size: 18px;
+            text-align: left;
         }
 
+        /* Поле ввода и кнопка открыть место — одинаковой ширины */
         .secret-input {
-            margin: 20px 0;
+            margin: 20px 0 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-
         .secret-input input {
-            padding: 12px 18px;
-            border-radius: 50px;
-            border: 1px solid #ff99bb;
-            width: 80%;
+            padding: 14px 18px;
+            border-radius: 60px;
+            border: 1px solid #ccb3bc;
+            width: 100%;
             font-size: 16px;
             text-align: center;
             outline: none;
+            font-family: inherit;
+        }
+        .secret-input button {
+            width: 100%;
         }
 
+        /* Карта и твоё изображение */
         .map-place {
-            margin-top: 15px;
-            border-radius: 28px;
+            margin: 15px 0;
+            border-radius: 32px;
             overflow: hidden;
             display: none;
         }
-
         .map-place iframe {
             width: 100%;
             height: 200px;
             border: none;
+        }
+        .custom-image {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .custom-image img {
+            max-width: 100%;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Кнопки общие */
+        .btn {
+            background: #e6ccd4;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-primary {
+            background: #ff99bb;
+            color: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .btn-primary:active, .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Две кнопки в ряд */
+        .double-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .double-buttons .btn {
+            flex: 1;
         }
 
         /* Анимация сердечек */
@@ -185,163 +239,142 @@
             animation: fly 1s ease-out forwards;
             z-index: 3000;
         }
-
         @keyframes fly {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-150px) scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Кнопка закрытия */
-        .close-modal-btn {
-            background: #ffb3cc;
-            margin-top: 20px;
-        }
-
-        /* Адаптация */
-        @media (max-width: 500px) {
-            .main-title { font-size: 42px; }
-            .timer-full { font-size: 22px; }
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- Блок 0: заголовок и вступление -->
     <div class="main-title">I love u, Rita</div>
     <div class="intro-text">
-        Каждый день с тобой — маленькая сказка. <br>
-        Здесь живут наши самые тёплые воспоминания, планы и мечты. <br>
-        Для тебя, Рита ❤️
+        Каждый день с тобой — маленькая сказка.<br>
+        Здесь живут наши самые тёплые воспоминания, планы и мечты.<br>
+        Для тебя, Рита
     </div>
 
-    <!-- Блок 1: Карточка свидания -->
-    <div class="date-card" id="dateCard">
-        <h2>💖 Приглашение на свидание</h2>
-        <div class="date-display" id="dateDisplay">📅 30 июня 2026, 19:00</div>
-        <button class="btn btn-primary" id="viewFullBtn">✨ Посмотреть ✨</button>
+    <!-- Карточка приглашения -->
+    <div class="date-card">
+        <div class="date-display">15 июня, 12:00</div>
+        <button class="glass-btn" id="viewFullBtn">Посмотреть</button>
     </div>
 </div>
 
-<!-- Полноэкранное модальное окно (Блок 1 - детали) -->
+<!-- Полноэкранное окно -->
 <div class="full-modal" id="fullModal">
     <div class="modal-content">
-        <h3>💘 Наше свидание 💘</h3>
-        <div id="fullDateText" style="font-size: 20px; font-weight: bold;">📅 30 июня 2026, 19:00</div>
-        <div class="timer-full" id="countdownTimer">Загрузка...</div>
-        <div class="dress-code">🎀 Dress code: твоё любимое платье 🎀</div>
+        <h3>Наше свидание</h3>
 
-        <!-- Скрытое поле с паролем -->
+        <!-- Таймер слева -->
+        <div class="timer-section">
+            <div class="timer-full" id="countdownTimer">Загрузка...</div>
+        </div>
+
+        <!-- Dress code простым текстом -->
+        <div class="dress-code">Dress code: твоё любимое платье</div>
+
+        <!-- Скрытое поле и кнопка открыть место -->
         <div class="secret-input">
             <input type="password" id="secretPassword" placeholder="Введи дату знакомства (ДД.ММ.ГГГГ)">
-            <button class="btn" id="unlockMapBtn" style="margin-top: 10px;">🔓 Открыть место встречи</button>
+            <button class="btn" id="unlockMapBtn">🔓 Открыть место встречи</button>
         </div>
+
+        <!-- Карта (появляется после пароля) -->
         <div class="map-place" id="mapContainer">
-            <!-- Здесь будет карта (Яндекс) -->
             <iframe id="yandexMap" src="about:blank"></iframe>
         </div>
 
-        <!-- Кнопки действий -->
-        <button class="btn btn-primary" id="goBtn">💗 Пойду! 💗</button>
-        <button class="btn" id="remindTelegramBtn">🔔 Напомнить в Telegram</button>
-        <button class="btn close-modal-btn" id="closeModalBtn">📱 Свернуть окно</button>
+        <!-- ТВОЁ ИЗОБРАЖЕНИЕ из Figma (заменишь ссылку) -->
+        <div class="custom-image" id="customImageContainer">
+            <img id="userDrawingImg" src="https://via.placeholder.com/400x200?text=Твой+рисунок+из+Figma" alt="Наша картинка">
+        </div>
+
+        <!-- Кнопка Пойду -->
+        <button class="btn btn-primary" id="goBtn" style="width:100%; margin: 15px 0 10px;">Пойду</button>
+
+        <!-- Две кнопки: Напомнить и Свернуть -->
+        <div class="double-buttons">
+            <button class="btn" id="remindTelegramBtn">🔔 Напомнить в Telegram</button>
+            <button class="btn" id="closeModalBtn">Свернуть окно</button>
+        </div>
     </div>
 </div>
 
 <script>
     // ======================= НАСТРОЙКИ (ТЫ МЕНЯЕШЬ ЗДЕСЬ) =======================
-    // Дата и время свидания (год, месяц (0=январь), число, час, минута)
-    const targetDate = new Date(2026, 5, 15, 12, 0, 0);  // 30 июня 2026, 19:00
+    // Дата свидания (только для таймера, 15 июня 2026 12:00)
+    const targetDate = new Date(2026, 5, 15, 12, 0, 0);
     
-    // Пароль для открытия места (дата знакомства)
-    const correctPassword = "15.12.2025";   // <- поменяй на свою дату
+    // Пароль (дата знакомства)
+    const correctPassword = "01.09.2023";   // <- замени на свою
     
-    // Ссылка на карту с местом встречи (Яндекс.Карты или Google)
-    // Пример: Яндекс.Карты с меткой. Ты можешь вставить любую ссылку "Поделиться"
-    const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456789&source=constructor";  // <- замени на реальную ссылку карты
+    // Ссылка на карту (Яндекс или Google)
+    const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456&source=constructor";
+    
+    // ССЫЛКА НА ТВОЙ РИСУНОК ИЗ FIGMA (замени после того как нарисуешь)
+    const yourFigmaImageUrl = "https://via.placeholder.com/500x300?text=Мой+рисунок+из+Figma+%F0%9F%8E%A8";
     // =========================================================================
 
-    // Инициализация Telegram WebApp
     const tg = window.Telegram.WebApp;
     tg.ready();
-    tg.expand();  // растягиваем на весь экран
+    tg.expand();
 
-    // Включаем вибрацию (если доступно)
     const haptic = () => {
-        if (tg.HapticFeedback) {
-            tg.HapticFeedback.impactOccurred('light');
-        }
+        if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
     };
 
-    // Функция обновления таймера (дни, часы, минуты, секунды)
+    // Обновление таймера
     function updateTimers() {
         const now = new Date();
         const diff = targetDate - now;
-        
         if (diff <= 0) {
-            document.getElementById('countdownTimer').innerHTML = "❤️ СЕГОДНЯ! ❤️";
+            document.getElementById('countdownTimer').innerHTML = "Сегодня!";
             return;
         }
-        
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        const timerText = `${days}д ${hours}ч ${minutes}м ${seconds}с`;
-        document.getElementById('countdownTimer').innerHTML = timerText;
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff / (1000*60*60)) % 24);
+        const mins = Math.floor((diff / (1000*60)) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+        document.getElementById('countdownTimer').innerHTML = `${days}д ${hours}ч ${mins}м ${secs}с`;
     }
-    
-    // Запускаем таймер и обновляем каждую секунду
     updateTimers();
     setInterval(updateTimers, 1000);
-    
-    // Отображение даты в человеческом виде
-    const formattedDate = targetDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    document.getElementById('dateDisplay').innerHTML = `📅 ${formattedDate}`;
-    document.getElementById('fullDateText').innerHTML = `📅 ${formattedDate}`;
-    
-    // Элементы модального окна
+
+    // Элементы
     const modal = document.getElementById('fullModal');
-    const viewFullBtn = document.getElementById('viewFullBtn');
-    const closeModalBtn = document.getElementById('closeModalBtn');
+    const viewBtn = document.getElementById('viewFullBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
     const goBtn = document.getElementById('goBtn');
     const remindBtn = document.getElementById('remindTelegramBtn');
-    const unlockMapBtn = document.getElementById('unlockMapBtn');
-    const secretPassInput = document.getElementById('secretPassword');
+    const unlockBtn = document.getElementById('unlockMapBtn');
+    const passInput = document.getElementById('secretPassword');
     const mapContainer = document.getElementById('mapContainer');
     const mapIframe = document.getElementById('yandexMap');
+    const userImg = document.getElementById('userDrawingImg');
     
-    // Открыть полноэкранное окно
-    viewFullBtn.addEventListener('click', () => {
+    // Подставляем твою картинку (заменишь ссылку)
+    userImg.src = yourFigmaImageUrl;
+
+    // Открыть окно
+    viewBtn.addEventListener('click', () => {
         modal.style.display = 'flex';
         haptic();
-        tg.expand();  // на случай, если не растянуто
+        tg.expand();
     });
-    
-    // Свернуть окно
-    closeModalBtn.addEventListener('click', () => {
+
+    // Свернуть
+    closeBtn.addEventListener('click', () => {
         modal.style.display = 'none';
         haptic();
     });
-    
-    // Кнопка "Пойду!" - летят сердечки
+
+    // Пойду! с сердечками
     goBtn.addEventListener('click', () => {
         haptic();
-        // Создаём 20 сердечек по всему экрану
         for (let i = 0; i < 20; i++) {
             const heart = document.createElement('div');
-            heart.innerHTML = ['❤️', '💖', '💗', '💓', '💕', '💘'][Math.floor(Math.random() * 6)];
+            heart.innerHTML = '❤️';
             heart.className = 'heart';
             heart.style.left = Math.random() * 100 + '%';
             heart.style.top = Math.random() * 80 + '%';
@@ -349,43 +382,36 @@
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1000);
         }
-        tg.showAlert("Я так жду этой встречи ❤️ Спасибо, что согласилась!");
+        tg.showAlert("Спасибо! Жду с нетерпением ❤️");
     });
-    
-    // Кнопка "Напомнить в Telegram"
+
+    // Напомнить
     remindBtn.addEventListener('click', () => {
         haptic();
         tg.showPopup({
-            title: "🔔 Напоминание",
+            title: "Напоминание",
             message: "Я пришлю уведомление за час до свидания!",
             buttons: [{ type: "ok" }]
         });
-        // Здесь можно будет позже добавить реальную отправку через бота
     });
-    
+
     // Открыть карту по паролю
-    unlockMapBtn.addEventListener('click', () => {
-        const enteredPass = secretPassInput.value.trim();
-        if (enteredPass === correctPassword) {
+    unlockBtn.addEventListener('click', () => {
+        if (passInput.value.trim() === correctPassword) {
             haptic();
             mapContainer.style.display = 'block';
-            // Устанавливаем карту
             mapIframe.src = meetingMapUrl;
-            tg.showAlert("🎉 Поздравляю! Вот место нашей встречи. Сохрани в тайне 🫢");
+            tg.showAlert("Вот место встречи. Никому не говори 🤫");
         } else {
-            tg.showAlert("❌ Неправильная дата... Попробуй ещё раз, это важно 💔");
+            tg.showAlert("Неверная дата. Попробуй ещё раз");
             haptic();
         }
     });
-    
-    // Закрытие модального окна при клике на фон (по желанию)
+
+    // Закрытие по клику на фон
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
+        if (e.target === modal) modal.style.display = 'none';
     });
-    
-    // Дополнительно: чтобы таймер не тормозил при скрытой вкладке — норм.
 </script>
 </body>
 </html>
