@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Моё Крутое Приложение</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 20px;
+            padding-bottom: 80px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Карточки с анимацией при наведении */
+        .card {
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: slideUp 0.4s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Задержки для каскадной анимации */
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--tg-theme-text-color, #000) 0%, var(--tg-theme-hint-color, #666) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .button {
+            background: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            transform: scale(1);
+        }
+
+        .button:active {
+            transform: scale(0.97);
+        }
+
+        /* Стили для чата */
+        .chat-messages {
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 16px;
+            padding: 16px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 80%;
+            animation: messagePop 0.2s ease-out;
+        }
+
+        @keyframes messagePop {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .message.user {
+            background: var(--tg-theme-button-color, #2481cc);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot {
+            background: var(--tg-theme-bg-color, #e4e4e4);
+            color: var(--tg-theme-text-color, #000);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            border-radius: 24px;
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+        }
+
+        /* Красивая прокрутка */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--tg-theme-hint-color, #aaa);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="greeting">✨ Привет!</h1>
+        <p style="margin-bottom: 24px; color: var(--tg-theme-hint-color, #666);">Добро пожаловать в моё мини-приложение</p>
+
+        <!-- Блок с функциями -->
+        <div class="card" id="userCard">
+            <strong>👤 Твои данные из Telegram</strong>
+            <p id="userInfo" style="margin-top: 8px;">Загрузка...</p>
+        </div>
+
+        <div class="card">
+            <strong>⚡ Крутые фишки</strong>
+            <ul style="margin-top: 12px; margin-left: 20px;">
+                <li>Плавные анимации</li>
+                <li>Красивая прокрутка</li>
+                <li>Тёмная тема (автоматически)</li>
+                <li>Виброотклик при нажатии</li>
+            </ul>
+            <button class="button" id="actionBtn">💥 Сделать что-то эпичное</button>
+        </div>
+
+        <!-- Встроенный чат-бот -->
+        <div class="card" style="padding: 16px;">
+            <strong>💬 Чат с ботом</strong>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">Привет! Я твой помощник. Задавай вопросы или просто болтай 😊</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Напиши что-нибудь..." />
+                <button class="button" id="sendBtn" style="width: auto; margin-top: 0; padding: 12px 20px;">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        
+        // Сообщаем, что всё загрузилось
+        tg.ready();
+        tg.expand();  // Растягиваем на весь экран
+        
+        // Включаем вибрацию для телефонов (если доступно)
+        const haptic = () => {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+        };
+
+        // 1. Показываем данные пользователя
+        const user = tg.initDataUnsafe?.user;
+        const userName = user?.first_name || 'гость';
+        document.getElementById('userInfo').innerHTML = `
+            <strong>ID:</strong> ${user?.id || 'неизвестно'}<br>
+            <strong>Имя:</strong> ${user?.first_name || '—'} ${user?.last_name || ''}<br>
+            <strong>Язык:</strong> ${user?.language_code || '—'}
+        `;
+        document.getElementById('greeting').innerHTML = `Привет, ${userName}! 🚀`;
+
+        // 2. Главная кнопка Telegram (внизу экрана)
+        tg.MainButton.setText("🔥 Главное действие");
+        tg.MainButton.show();
+        tg.MainButton.onClick(() => {
+            haptic();
+            tg.showPopup({
+                title: "💪 Круто!",
+                message: `Привет, ${userName}! Ты нажал главную кнопку.`,
+                buttons: [{ type: "ok" }]
+            });
+        });
+
+        // 3. Обработка кнопки действия
+        document.getElementById('actionBtn').addEventListener('click', () => {
+            haptic();
+            tg.showAlert(`🔥 Эпично! Твоё действие засчитано, ${userName}.`);
+        });
+
+        // 4. Встроенный чат (простой, но работает)
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        
+        function addMessage(text, isUser = true) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            msgDiv.textContent = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Анимация уже в CSS
+        }
+        
+        function botReply(message) {
+            const lowerMsg = message.toLowerCase();
+            let reply = "Интересно... Расскажи ещё!";
+            
+            if (lowerMsg.includes('привет') || lowerMsg.includes('здарова')) {
+                reply = "И тебе привет! Как дела? 🫡";
+            } else if (lowerMsg.includes('как дела')) {
+                reply = "У меня отлично! Я же бот, всегда на позитиве 😎";
+            } else if (lowerMsg.includes('помощь') || lowerMsg.includes('help')) {
+                reply = "Я могу просто поболтать или подсказать, если что. Спрашивай!";
+            } else if (lowerMsg.includes('пока')) {
+                reply = "Пока-пока! Заходи ещё 👋";
+            }
+            
+            setTimeout(() => addMessage(reply, false), 400);
+        }
+        
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            
+            addMessage(text, true);
+            chatInput.value = '';
+            haptic();
+            botReply(text);
+        }
+        
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        // Обновляем стили при смене темы (Telegram сам обновляет цвета)
+        document.body.style.background = tg.themeParams.bg_color || '#ffffff';
+    </script>
+</body>
+</html>
