@@ -131,7 +131,6 @@
             margin-bottom: 8px;
         }
 
-        /* Таймер - минимальный отступ */
         .timer-section {
             margin: 5px 0 0px;
         }
@@ -148,15 +147,19 @@
             text-align: center;
         }
 
-        /* Картинки - практически без отступов */
+        /* Картинки — без обводки, теней и скруглений */
         .my-image {
             margin: 6px 0;
             text-align: center;
         }
         .my-image img {
             max-width: 100%;
-            border-radius: 32px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: block;
+            margin: 0;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
         }
 
         .secret-input {
