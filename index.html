@@ -119,37 +119,31 @@
             max-width: 480px;
             max-height: 85vh;
             border-radius: 48px;
-            padding: 20px 20px 30px;
+            padding: 0 20px 30px;
             overflow-y: auto;
             font-family: 'MTS Wide', sans-serif;
             color: #1a1a1a;
         }
 
-        .modal-content h3 {
-            font-size: 28px;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
         .timer-section {
-            margin: 5px 0 0px;
+            margin: 2px 0 0px;
         }
         .timer-full {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 600;
             letter-spacing: 1px;
             text-align: center;
         }
 
         .dress-code {
-            margin: 5px 0 5px;
+            margin: 2px 0 5px;
             font-size: 18px;
             text-align: center;
         }
 
-        /* Картинки — без обводки, теней и скруглений */
+        /* Картинки — без обводки, теней и скруглений, минимальные отступы */
         .my-image {
-            margin: 6px 0;
+            margin: 2px 0;
             text-align: center;
         }
         .my-image img {
@@ -163,7 +157,7 @@
         }
 
         .secret-input {
-            margin: 15px 0 10px;
+            margin: 10px 0 10px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -257,8 +251,7 @@
 
 <div class="full-modal" id="fullModal">
     <div class="modal-content">
-        <h3>Наше свидание</h3>
-
+        <!-- КАРТИНКА №1 (прилегает к краю, без отступа) -->
         <div class="my-image" id="img1Container">
             <img id="userImg1" src="https://via.placeholder.com/400x180?text=Рисунок+1" alt="Наша картинка 1">
         </div>
@@ -269,18 +262,17 @@
 
         <div class="dress-code">Dress code: твоё любимое платье</div>
 
+        <!-- КАРТИНКА №2 -->
         <div class="my-image" id="img2Container">
             <img id="userImg2" src="https://via.placeholder.com/400x180?text=Рисунок+2" alt="Наша картинка 2">
         </div>
 
         <button class="btn btn-primary" id="goBtn">Пойду</button>
 
-        <div class="my-image" id="img3Container">
-            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Рисунок+3" alt="Наша картинка 3">
-        </div>
+        <!-- Третья картинка УДАЛЕНА -->
 
         <div class="secret-input">
-            <input type="text" id="secretPassword" placeholder="ДД.ММ.ГГГГ">
+            <input type="text" id="secretPassword" placeholder="Когда всё началось?">
             <button class="btn" id="unlockMapBtn">🔓 Открыть место встречи</button>
         </div>
 
@@ -297,11 +289,14 @@
 
 <script>
     const targetDate = new Date(2026, 5, 15, 12, 0, 0);
-    const correctPassword = "15.12.2025";
+    
+    // Пароль теперь просто две цифры (22 — это 22 сентября, 15 — 15 декабря)
+    // Ты можешь поменять на 22 или 15 прямо здесь
+    const correctPassword = "22";  // ← поменяй на 15, если хочешь дату начала отношений
+    
     const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456&source=constructor";
     const yourImage1 = "https://raw.githubusercontent.com/MrBarbieBoy/PUPA_ZALUPA/main/risunok1.png";
     const yourImage2 = "https://via.placeholder.com/500x200?text=Мой+рисунок+2";
-    const yourImage3 = "https://via.placeholder.com/500x200?text=Мой+рисунок+3";
 
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -312,7 +307,6 @@
 
     document.getElementById('userImg1').src = yourImage1;
     document.getElementById('userImg2').src = yourImage2;
-    document.getElementById('userImg3').src = yourImage3;
 
     function updateTimers() {
         const now = new Date();
@@ -375,18 +369,17 @@
         });
     });
 
+    // Проверка пароля — теперь просто две цифры
     unlockBtn.addEventListener('click', () => {
-        let entered = passInput.value.trim();
-        const normalizedEntered = entered.replace(/[^\d]/g, '');
-        const normalizedCorrect = correctPassword.replace(/[^\d]/g, '');
+        const entered = passInput.value.trim();
         
-        if (normalizedEntered === normalizedCorrect) {
+        if (entered === correctPassword) {
             haptic();
             mapContainer.style.display = 'block';
             mapIframe.src = meetingMapUrl;
             tg.showAlert("Вот место встречи. Никому не говори");
         } else {
-            tg.showAlert("Неверная дата. Попробуй ещё раз (ДД.ММ.ГГГГ)");
+            tg.showAlert("Неверно. Попробуй ещё раз");
             haptic();
         }
     });
