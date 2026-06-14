@@ -27,7 +27,6 @@
             margin: 0 auto;
         }
 
-        /* Заголовок — одна строка */
         .main-title {
             font-family: 'MTS Wide', sans-serif;
             font-size: 48px;
@@ -38,7 +37,6 @@
             white-space: nowrap;
         }
 
-        /* Вступление — слева */
         .intro-text {
             text-align: left;
             font-size: 16px;
@@ -48,7 +46,6 @@
             padding: 0 5px;
         }
 
-        /* Карточка приглашения */
         .date-card {
             background: rgba(255, 248, 250, 0.95);
             border-radius: 48px;
@@ -72,7 +69,6 @@
             margin: 10px 0 30px;
         }
 
-        /* Настоящая стеклянная кнопка */
         .glass-btn {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(12px);
@@ -103,7 +99,6 @@
             background: rgba(255, 255, 255, 0.5);
         }
 
-        /* Модальное окно */
         .full-modal {
             position: fixed;
             top: 0;
@@ -124,7 +119,7 @@
             max-width: 480px;
             max-height: 85vh;
             border-radius: 48px;
-            padding: 24px 20px 30px;
+            padding: 20px 20px 30px;
             overflow-y: auto;
             font-family: 'MTS Wide', sans-serif;
             color: #1a1a1a;
@@ -133,12 +128,12 @@
         .modal-content h3 {
             font-size: 28px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
         }
 
-        /* Таймер */
+        /* Таймер - минимальный отступ */
         .timer-section {
-            margin: 15px 0 15px;
+            margin: 5px 0 0px;
         }
         .timer-full {
             font-size: 28px;
@@ -148,14 +143,14 @@
         }
 
         .dress-code {
-            margin: 10px 0 20px;
+            margin: 5px 0 5px;
             font-size: 18px;
             text-align: center;
         }
 
-        /* Мои картинки */
+        /* Картинки - практически без отступов */
         .my-image {
-            margin: 20px 0;
+            margin: 6px 0;
             text-align: center;
         }
         .my-image img {
@@ -164,9 +159,8 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* Поле ввода даты */
         .secret-input {
-            margin: 20px 0 10px;
+            margin: 15px 0 10px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -186,7 +180,6 @@
             width: 100%;
         }
 
-        /* Карта */
         .map-place {
             margin: 15px 0;
             border-radius: 32px;
@@ -199,7 +192,6 @@
             border: none;
         }
 
-        /* Кнопки */
         .btn {
             background: #e6ccd4;
             border: none;
@@ -215,6 +207,7 @@
         .btn-primary {
             background: #ff99bb;
             width: 100%;
+            margin-top: 5px;
         }
         .btn-primary:active, .btn:active {
             transform: scale(0.97);
@@ -224,13 +217,12 @@
             display: flex;
             gap: 12px;
             justify-content: center;
-            margin-top: 25px;
+            margin-top: 20px;
         }
         .double-buttons .btn {
             flex: 1;
         }
 
-        /* Сердечки */
         .heart {
             position: fixed;
             font-size: 24px;
@@ -260,14 +252,12 @@
     </div>
 </div>
 
-<!-- Модальное окно -->
 <div class="full-modal" id="fullModal">
     <div class="modal-content">
         <h3>Наше свидание</h3>
 
-        <!-- КАРТИНКА №1 (твоя) -->
         <div class="my-image" id="img1Container">
-            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Рисунок+1+из+Figma" alt="Наша картинка 1">
+            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Рисунок+1" alt="Наша картинка 1">
         </div>
 
         <div class="timer-section">
@@ -276,16 +266,14 @@
 
         <div class="dress-code">Dress code: твоё любимое платье</div>
 
-        <!-- КАРТИНКА №2 (твоя) -->
         <div class="my-image" id="img2Container">
-            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Рисунок+2+из+Figma" alt="Наша картинка 2">
+            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Рисунок+2" alt="Наша картинка 2">
         </div>
 
         <button class="btn btn-primary" id="goBtn">Пойду</button>
 
-        <!-- КАРТИНКА №3 (твоя) -->
         <div class="my-image" id="img3Container">
-            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Рисунок+3+из+Figma" alt="Наша картинка 3">
+            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Рисунок+3" alt="Наша картинка 3">
         </div>
 
         <div class="secret-input">
@@ -305,18 +293,12 @@
 </div>
 
 <script>
-    // ======================= НАСТРОЙКИ (ТЫ МЕНЯЕШЬ ЗДЕСЬ) =======================
     const targetDate = new Date(2026, 5, 15, 12, 0, 0);
-    const correctPassword = "15.12.2025";   // замени на свою дату знакомства
-    
-    // Ссылка на карту
+    const correctPassword = "15.12.2025";
     const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456&source=constructor";
-    
-    // ТВОИ КАРТИНКИ (замени ссылки после того как нарисуешь в Figma)
     const yourImage1 = "https://raw.githubusercontent.com/MrBarbieBoy/PUPA_ZALUPA/main/risunok1.png";
     const yourImage2 = "https://via.placeholder.com/500x200?text=Мой+рисунок+2";
     const yourImage3 = "https://via.placeholder.com/500x200?text=Мой+рисунок+3";
-    // =========================================================================
 
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -325,12 +307,10 @@
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
     };
 
-    // Устанавливаем твои картинки
     document.getElementById('userImg1').src = yourImage1;
     document.getElementById('userImg2').src = yourImage2;
     document.getElementById('userImg3').src = yourImage3;
 
-    // Таймер
     function updateTimers() {
         const now = new Date();
         const diff = targetDate - now;
@@ -347,7 +327,6 @@
     updateTimers();
     setInterval(updateTimers, 1000);
 
-    // Элементы
     const modal = document.getElementById('fullModal');
     const viewBtn = document.getElementById('viewFullBtn');
     const closeBtn = document.getElementById('closeModalBtn');
@@ -369,7 +348,6 @@
         haptic();
     });
 
-    // Кнопка Пойду — сердечки
     goBtn.addEventListener('click', () => {
         haptic();
         for (let i = 0; i < 25; i++) {
@@ -385,7 +363,6 @@
         tg.showAlert("Спасибо! Жду с нетерпением");
     });
 
-    // Напомнить (пока попап, в следующем блоке сделаем реальное)
     remindBtn.addEventListener('click', () => {
         haptic();
         tg.showPopup({
@@ -395,10 +372,8 @@
         });
     });
 
-    // Проверка пароля (гибкая: убираем точки и пробелы)
     unlockBtn.addEventListener('click', () => {
         let entered = passInput.value.trim();
-        // Убираем все точки и пробелы для сравнения
         const normalizedEntered = entered.replace(/[^\d]/g, '');
         const normalizedCorrect = correctPassword.replace(/[^\d]/g, '');
         
