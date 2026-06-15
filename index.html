@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>I love u, Rita</title>
+    <title>Rita & You</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.cdnfonts.com/css/mts-wide" rel="stylesheet">
     <style>
@@ -27,14 +27,23 @@
             margin: 0 auto;
         }
 
-        .main-title {
-            font-family: 'MTS Wide', sans-serif;
-            font-size: 48px;
-            color: #1a1a1a;
+        /* Большой пробел сверху вместо заголовка */
+        .top-spacer {
+            height: 80px;
+        }
+
+        /* Главная картинка */
+        .main-image {
+            margin: 0 0 20px 0;
             text-align: center;
-            margin: 20px 0 12px;
-            font-weight: 600;
-            white-space: nowrap;
+        }
+        .main-image img {
+            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
         }
 
         .intro-text {
@@ -119,14 +128,14 @@
             max-width: 480px;
             max-height: 85vh;
             border-radius: 48px;
-            padding: 0 20px 30px;
+            padding: 20px 20px 30px;
             overflow-y: auto;
             font-family: 'MTS Wide', sans-serif;
             color: #1a1a1a;
         }
 
         .timer-section {
-            margin: 2px 0 0px;
+            margin: 5px 0 0px;
         }
         .timer-full {
             font-size: 22px;
@@ -136,14 +145,13 @@
         }
 
         .dress-code {
-            margin: 2px 0 5px;
+            margin: 5px 0 15px;
             font-size: 18px;
             text-align: center;
         }
 
-        /* Картинки — без обводки, теней и скруглений, минимальные отступы */
         .my-image {
-            margin: 2px 0;
+            margin: 12px 0;
             text-align: center;
         }
         .my-image img {
@@ -157,7 +165,7 @@
         }
 
         .secret-input {
-            margin: 10px 0 10px;
+            margin: 15px 0 10px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -235,7 +243,14 @@
 </head>
 <body>
 <div class="container">
-    <div class="main-title">I love u, Rita</div>
+    <!-- Большой пробел сверху вместо заголовка -->
+    <div class="top-spacer"></div>
+
+    <!-- Главная картинка -->
+    <div class="main-image" id="mainImageContainer">
+        <img id="mainImage" src="https://via.placeholder.com/500x300?text=Главная+картинка" alt="Главная картинка">
+    </div>
+
     <div class="intro-text">
         Каждый день с тобой — маленькая сказка.<br>
         Здесь живут наши самые тёплые воспоминания, планы и мечты.<br>
@@ -251,25 +266,28 @@
 
 <div class="full-modal" id="fullModal">
     <div class="modal-content">
-        <!-- КАРТИНКА №1 (прилегает к краю, без отступа) -->
+        <!-- КАРТИНКА №1 -->
         <div class="my-image" id="img1Container">
-            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Рисунок+1" alt="Наша картинка 1">
+            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Картинка+1" alt="Картинка 1">
         </div>
 
         <div class="timer-section">
             <div class="timer-full" id="countdownTimer">Загрузка...</div>
         </div>
 
-        <div class="dress-code">Dress code: твоё любимое платье</div>
-
         <!-- КАРТИНКА №2 -->
         <div class="my-image" id="img2Container">
-            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Рисунок+2" alt="Наша картинка 2">
+            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Картинка+2" alt="Картинка 2">
         </div>
+
+        <div class="dress-code">Dress code: твоё любимое платье</div>
 
         <button class="btn btn-primary" id="goBtn">Пойду</button>
 
-        <!-- Третья картинка УДАЛЕНА -->
+        <!-- КАРТИНКА №3 (после кнопки Пойду) -->
+        <div class="my-image" id="img3Container">
+            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Картинка+3" alt="Картинка 3">
+        </div>
 
         <div class="secret-input">
             <input type="text" id="secretPassword" placeholder="Когда всё началось?">
@@ -289,14 +307,14 @@
 
 <script>
     const targetDate = new Date(2026, 5, 15, 12, 0, 0);
-    
-    // Пароль теперь просто две цифры (22 — это 22 сентября, 15 — 15 декабря)
-    // Ты можешь поменять на 22 или 15 прямо здесь
-    const correctPassword = "22";  // ← поменяй на 15, если хочешь дату начала отношений
-    
+    const correctPassword = "22";  // 22 — 22 сентября, поменяй на 15 если хочешь 15 декабря
     const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456&source=constructor";
+    
+    // Ссылки на твои картинки (замени на свои)
+    const mainPicture = "https://raw.githubusercontent.com/MrBarbieBoy/PUPA_ZALUPA/main/risunok1.png";
     const yourImage1 = "https://raw.githubusercontent.com/MrBarbieBoy/PUPA_ZALUPA/main/risunok1.png";
     const yourImage2 = "https://via.placeholder.com/500x200?text=Мой+рисунок+2";
+    const yourImage3 = "https://via.placeholder.com/500x200?text=Мой+рисунок+3";
 
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -305,8 +323,11 @@
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
     };
 
+    // Устанавливаем все картинки
+    document.getElementById('mainImage').src = mainPicture;
     document.getElementById('userImg1').src = yourImage1;
     document.getElementById('userImg2').src = yourImage2;
+    document.getElementById('userImg3').src = yourImage3;
 
     function updateTimers() {
         const now = new Date();
@@ -369,7 +390,6 @@
         });
     });
 
-    // Проверка пароля — теперь просто две цифры
     unlockBtn.addEventListener('click', () => {
         const entered = passInput.value.trim();
         
