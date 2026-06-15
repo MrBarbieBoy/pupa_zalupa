@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rita & You</title>
+    <title>Rita ❤️</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.cdnfonts.com/css/mts-wide" rel="stylesheet">
     <style>
@@ -27,14 +27,14 @@
             margin: 0 auto;
         }
 
-        /* Большой пробел сверху вместо заголовка */
-        .top-spacer {
-            height: 80px;
+        /* Большой отступ сверху — четверть экрана */
+        .spacer {
+            height: 25vh;
         }
 
-        /* Главная картинка */
+        /* Картинка в основном окне */
         .main-image {
-            margin: 0 0 20px 0;
+            margin: 20px 0;
             text-align: center;
         }
         .main-image img {
@@ -50,6 +50,7 @@
             text-align: left;
             font-size: 16px;
             color: #1a1a1a;
+            margin-top: 20px;
             margin-bottom: 35px;
             line-height: 1.5;
             padding: 0 5px;
@@ -135,7 +136,7 @@
         }
 
         .timer-section {
-            margin: 5px 0 0px;
+            margin: 10px 0 5px;
         }
         .timer-full {
             font-size: 22px;
@@ -150,8 +151,9 @@
             text-align: center;
         }
 
+        /* Картинки в модальном окне */
         .my-image {
-            margin: 12px 0;
+            margin: 10px 0;
             text-align: center;
         }
         .my-image img {
@@ -243,12 +245,12 @@
 </head>
 <body>
 <div class="container">
-    <!-- Большой пробел сверху вместо заголовка -->
-    <div class="top-spacer"></div>
+    <!-- Большой пробел сверху (четверть экрана) -->
+    <div class="spacer"></div>
 
-    <!-- Главная картинка -->
-    <div class="main-image" id="mainImageContainer">
-        <img id="mainImage" src="https://via.placeholder.com/500x300?text=Главная+картинка" alt="Главная картинка">
+    <!-- КАРТИНКА №4 (главная) -->
+    <div class="main-image" id="mainImgContainer">
+        <img id="userImg4" src="https://via.placeholder.com/500x300?text=Главная+картинка" alt="Главная картинка">
     </div>
 
     <div class="intro-text">
@@ -268,7 +270,7 @@
     <div class="modal-content">
         <!-- КАРТИНКА №1 -->
         <div class="my-image" id="img1Container">
-            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Картинка+1" alt="Картинка 1">
+            <img id="userImg1" src="https://via.placeholder.com/400x180?text=Рисунок+1" alt="Картинка 1">
         </div>
 
         <div class="timer-section">
@@ -277,16 +279,16 @@
 
         <!-- КАРТИНКА №2 -->
         <div class="my-image" id="img2Container">
-            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Картинка+2" alt="Картинка 2">
+            <img id="userImg2" src="https://via.placeholder.com/400x180?text=Рисунок+2" alt="Картинка 2">
         </div>
 
         <div class="dress-code">Dress code: твоё любимое платье</div>
 
         <button class="btn btn-primary" id="goBtn">Пойду</button>
 
-        <!-- КАРТИНКА №3 (после кнопки Пойду) -->
+        <!-- КАРТИНКА №3 -->
         <div class="my-image" id="img3Container">
-            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Картинка+3" alt="Картинка 3">
+            <img id="userImg3" src="https://via.placeholder.com/400x180?text=Рисунок+3" alt="Картинка 3">
         </div>
 
         <div class="secret-input">
@@ -307,14 +309,15 @@
 
 <script>
     const targetDate = new Date(2026, 5, 15, 12, 0, 0);
-    const correctPassword = "22";  // 22 — 22 сентября, поменяй на 15 если хочешь 15 декабря
+    const correctPassword = "22";
     const meetingMapUrl = "https://yandex.ru/map-widget/v1/?um=constructor%3A123456&source=constructor";
     
-    // Ссылки на твои картинки (замени на свои)
-    const mainPicture = "https://raw.githubusercontent.com/MrBarbieBoy/PUPA_ZALUPA/main/risunok1.png";
+    // ТВОИ КАРТИНКИ — замени ссылки на свои
+    // Формат: risunok1.png, risunok2.png, risunok3.png, risunok4.png
     const yourImage1 = "https://raw.githubusercontent.com/MrBarbieBoy/PUPA_ZALUPA/main/risunok1.png";
-    const yourImage2 = "https://via.placeholder.com/500x200?text=Мой+рисунок+2";
-    const yourImage3 = "https://via.placeholder.com/500x200?text=Мой+рисунок+3";
+    const yourImage2 = "https://via.placeholder.com/500x200?text=Рисунок+2";
+    const yourImage3 = "https://via.placeholder.com/500x200?text=Рисунок+3";
+    const yourImage4 = "https://via.placeholder.com/500x300?text=Главная+картинка";
 
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -323,11 +326,10 @@
         if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
     };
 
-    // Устанавливаем все картинки
-    document.getElementById('mainImage').src = mainPicture;
     document.getElementById('userImg1').src = yourImage1;
     document.getElementById('userImg2').src = yourImage2;
     document.getElementById('userImg3').src = yourImage3;
+    document.getElementById('userImg4').src = yourImage4;
 
     function updateTimers() {
         const now = new Date();
